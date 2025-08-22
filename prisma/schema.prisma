@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      String   @default("USER")
+  player    Player?
+  verificationRequests VerificationRequest[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Player {
+  id         Int            @id @default(autoincrement())
+  user       User           @relation(fields: [userId], references: [id])
+  userId     Int            @unique
+  displayName String
+  rating     Int            @default(1200)
+  avatarUrl  String?
+  ratings    PlayerRating[]
+  teams      TeamPlayer[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model Tournament {
+  id          Int       @id @default(autoincrement())
+  name        String
+  date        DateTime
+  format      String    @default("AMERICANO")
+  matches     Match[]
+  playerRatings PlayerRating[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Team {
+  id      Int      @id @default(autoincrement())
+  players TeamPlayer[]
+  matchesAsA Match[] @relation("MatchTeamA")
+  matchesAsB Match[] @relation("MatchTeamB")
+}
+
+model TeamPlayer {
+  id       Int    @id @default(autoincrement())
+  team     Team   @relation(fields: [teamId], references: [id])
+  teamId   Int
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId Int
+}
+
+model Match {
+  id           Int      @id @default(autoincrement())
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+  tournamentId Int
+  teamA        Team     @relation("MatchTeamA", fields: [teamAId], references: [id])
+  teamAId      Int
+  teamB        Team     @relation("MatchTeamB", fields: [teamBId], references: [id])
+  teamBId      Int
+  scoreA       Int?
+  scoreB       Int?
+  playedAt     DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model PlayerRating {
+  id          Int      @id @default(autoincrement())
+  player      Player   @relation(fields: [playerId], references: [id])
+  playerId    Int
+  tournament  Tournament? @relation(fields: [tournamentId], references: [id])
+  tournamentId Int?
+  delta       Int
+  createdAt   DateTime @default(now())
+}
+
+model VerificationRequest {
+  id        Int    @id @default(autoincrement())
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+  playerId  Int
+  status    String @default("PENDING")
+  message   String?
+  createdAt DateTime @default(now())
+}
