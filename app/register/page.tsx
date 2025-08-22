@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const register = async (user) => {
+const register = async (user: any) => {
   const res = await fetch('/api/auth/register', {
     method: 'POST',
     headers: {
@@ -28,7 +28,7 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     if (!displayName) {
@@ -38,7 +38,7 @@ export default function RegisterPage() {
     try {
       await register({ email, password, displayName });
       router.push('/');
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message || 'Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.');
     }
   };
