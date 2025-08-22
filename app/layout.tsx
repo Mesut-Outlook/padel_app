@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'Padel App',
-  description: 'Padel turnuva yönetimi uygulaması',
+  description: 'Padel turnuva yönetimi uygulaması.',
 };
 
 export default function RootLayout({
