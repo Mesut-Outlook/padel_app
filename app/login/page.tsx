@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const login = async (user) => {
+const login = async (user: any) => {
   const res = await fetch('/api/auth/login', {
     method: 'POST',
     headers: {
@@ -26,13 +26,13 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     try {
       await login({ email, password });
       router.push('/');
-    } catch (err) {
+    } catch (err: any) {
       setError('Giriş başarısız. Lütfen bilgilerinizi kontrol edin.');
     }
   };
