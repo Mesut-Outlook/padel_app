@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar';
 import './globals.css';
 
 export const metadata = {
-  title: 'PadelMaster',
+  title: 'Padel App',
   description: 'Padel turnuva yönetimi uygulaması',
 };
 
